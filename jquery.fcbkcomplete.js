@@ -71,12 +71,12 @@
         element.after(temp_elem);
         element.remove();
         element = temp_elem;
-        
+
         //public method to add new item
         $(element).bind("addItem", function(event, data) {
           addItem(data.title, data.value, 0, 0, 0);
         });
-        
+
         //public method to remove item
         $(element).bind("removeItem", function(event, data) {
           var item = holder.children('li[rel=' + data.value + ']');
@@ -92,7 +92,7 @@
         complete.remove();
         element.show();
       });
-      
+
       function addItem(title, value, preadded, locked, focusme) {
         if (!maxItems()) {
           return false;
@@ -180,7 +180,7 @@
         });
         input.keyup( function(event) {
           var etext = xssPrevent(input.val());
-          
+
           if (event.keyCode == 8 && etext.length == 0) {
             feed.hide();
             if (!holder.children("li.bit-box:last").hasClass('locked')) {
@@ -254,13 +254,13 @@
             cache.set(val.key, val.value);
           });
         }
-        
+
         var maximum = options.maxshownitems < cache.length() ? options.maxshownitems: cache.length();
         var filter = "i";
         if (options.filter_case) {
           filter = "";
         }
-        
+
         var content = '';
 
         $.each(cache.search(etext), function (i, object) {
@@ -272,7 +272,7 @@
             maximum--;
           }
         });
-        
+
         feed.append(content);
 
         if (options.firstselected) {
@@ -444,14 +444,14 @@
       }
 
       function funCall(func, item) {
-        var _object = "";
+        var _object = {};
         for (i = 0; i < item.get(0).attributes.length; i++) {
           if (item.get(0).attributes[i].nodeValue != null) {
-            _object += "\"_" + item.get(0).attributes[i].nodeName + "\": \"" + item.get(0).attributes[i].nodeValue + "\",";
+            _object["_" + item.get(0).attributes[i].nodeName] = item.get(0).attributes[i].nodeValue;
           }
         }
-        _object = "{" + _object + " notinuse: 0}";
-        func.call(func, _object);
+        _object.notinuse = 0;
+        return func.call(func, _object);
       }
 
       function checkFocusOn() {
@@ -497,14 +497,14 @@
       var feed = null;
       var complete = null;
       var counter = 0;
-      
+
       var focuson = null;
       var deleting = 0;
       var complete_hover = 1;
 
       var element = $(this);
       var elemid = element.attr("id");
-      
+
       var json_cache = $('<div></div>').after(element);
       var json_cache_object = {
         'set': function (id, val) {
@@ -514,7 +514,7 @@
           return json_cache.data(id);
         }
       }
-      
+
       var cache = {
         'search': function (text, callback) {
           var temp = new Array();
